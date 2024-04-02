@@ -1,4 +1,6 @@
+import Data.List (find)
 import Data.List.Split (splitOn)
+import Data.Maybe (fromJust)
 
 toInt :: String -> Int
 toInt s = read s :: Int
@@ -14,13 +16,15 @@ replaceAtIndex :: Int -> a -> [a] -> [a]
 replaceAtIndex i x xs = take i xs ++ [x] ++ drop (i + 1) xs
 
 run :: Int -> [Int] -> [Int]
-run i xs = if opcode == 99
+run i xs =
+  if opcode == 99
     then xs
     else run (i + 4) (replaceAtIndex output (opcodeComputation opcode x y) xs)
-    where opcode = xs !! i
-          x = xs !! (xs !! (i + 1))
-          y = xs !! (xs !! (i + 2))
-          output = xs !! (i + 3)
+  where
+    opcode = xs !! i
+    x = xs !! (xs !! (i + 1))
+    y = xs !! (xs !! (i + 2))
+    output = xs !! (i + 3)
 
 computeOutput :: [Int] -> Int
 computeOutput program = head $ run 0 program
@@ -32,19 +36,20 @@ first :: String -> Int
 first inp = computeOutput $ replace 12 2 $ parse inp
 
 search :: [Int] -> (Int, Int)
-search program = head [
-        (noun, verb) | noun <- [1..99], verb <- [1..99], 
-        computeOutput (replace noun verb program) == 19690720
-    ]
+search program =
+  fromJust $
+    find
+      (\(noun, verb) -> computeOutput (replace noun verb program) == 19690720)
+      [(noun, verb) | noun <- [1 .. 99], verb <- [1 .. 99]]
 
 second :: String -> Int
 second inp =
-    let (noun, verb) = search $ parse inp
-    in  100 * noun + verb
+  let (noun, verb) = search $ parse inp
+   in 100 * noun + verb
 
 main :: IO ()
 main = do
-    testInput <- readFile "test-input.txt"
-    input <- readFile "input.txt"
-    print $ first input
-    print $ second input
+  testInput <- readFile "test-input.txt"
+  input <- readFile "input.txt"
+  print $ first input
+  print $ second input
