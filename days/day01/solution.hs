@@ -4,19 +4,22 @@ toInt s = read s :: Integer
 required :: Integer -> Integer
 required mass = mass `div` 3 - 2
 
-first :: String -> Integer
-first inp = sum $ map (required . toInt) $ lines inp
+compute :: (Integer -> Integer) -> String -> Integer
+compute f inp = sum $ map (f . toInt) $ lines inp
 
-fuelRequied :: Integer -> Integer
-fuelRequied mass =
+first :: String -> Integer
+first = compute required
+
+fuelRequired :: Integer -> Integer
+fuelRequired mass =
   if remaining <= 0
     then remaining
-    else remaining + fuelRequied remaining
+    else remaining + fuelRequired remaining
   where
     remaining = required mass
 
 second :: String -> Integer
-second inp = sum $ map (fuelRequied . toInt) $ lines inp
+second = compute fuelRequired
 
 main :: IO ()
 main = do
