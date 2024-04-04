@@ -42,12 +42,15 @@ getWireFromPath = computeWire [(0, 0)]
 intersectionsBetweenWires :: Wire -> Wire -> [Position]
 intersectionsBetweenWires w1 w2 = filter (\x -> x /= (0, 0)) $ toList $ intersection (fromList w1) (fromList w2)
 
-first :: String -> Int
-first inp = minimum $ map (\(y, x) -> abs y + abs x) $ intersectionsBetweenWires w1 w2
+compute :: (Wire -> Wire -> Position -> Int) -> String -> Int
+compute f inp = minimum $ map (f w1 w2) $ intersectionsBetweenWires w1 w2
   where
     (p1, p2) = parse inp
     w1 = getWireFromPath p1
     w2 = getWireFromPath p2
+
+first :: String -> Int
+first = compute (\_ _ (y, x) -> abs y + abs x)
 
 distanceToIntersection :: Wire -> Wire -> Position -> Int
 distanceToIntersection w1 w2 inter = d1 + d2
@@ -56,11 +59,7 @@ distanceToIntersection w1 w2 inter = d1 + d2
     d2 = fromJust $ elemIndex inter w2
 
 second :: String -> Int
-second inp = minimum $ map (distanceToIntersection w1 w2) $ intersectionsBetweenWires w1 w2
-  where
-    (p1, p2) = parse inp
-    w1 = getWireFromPath p1
-    w2 = getWireFromPath p2
+second = compute distanceToIntersection
 
 main :: IO ()
 main = do
