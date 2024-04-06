@@ -1,8 +1,8 @@
 first :: String -> Int
-first inp = 0
+first inp = error "Not implemented yet"
 
 second :: String -> Int
-second inp = 0
+second inp = error "Not implemented yet"
 
 main :: IO ()
 main = do
