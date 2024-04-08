@@ -11,11 +11,8 @@ type Position = (Int, Int)
 
 type Wire = [Position]
 
-toInt :: String -> Int
-toInt s = read s :: Int
-
 parseToPath :: String -> Path
-parseToPath row = map (\s -> (head s, toInt $ tail s)) $ splitOn "," row
+parseToPath row = map (\s -> (head s, read $ tail s)) $ splitOn "," row
 
 parse :: String -> (Path, Path)
 parse inp =

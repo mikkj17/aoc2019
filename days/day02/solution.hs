@@ -2,11 +2,8 @@ import Data.List (find)
 import Data.List.Split (splitOn)
 import Data.Maybe (fromJust)
 
-toInt :: String -> Int
-toInt s = read s :: Int
-
 parse :: String -> [Int]
-parse inp = map toInt $ splitOn "," inp
+parse inp = map read $ splitOn "," inp
 
 opcodeComputation :: Int -> Int -> Int -> Int
 opcodeComputation 1 x y = x + y

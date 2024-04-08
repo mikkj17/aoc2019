@@ -1,11 +1,8 @@
-toInt :: String -> Integer
-toInt s = read s :: Integer
-
 required :: Integer -> Integer
 required mass = mass `div` 3 - 2
 
 compute :: (Integer -> Integer) -> String -> Integer
-compute f inp = sum $ map (f . toInt) $ lines inp
+compute f inp = sum $ map (f . read) $ lines inp
 
 first :: String -> Integer
 first = compute required
